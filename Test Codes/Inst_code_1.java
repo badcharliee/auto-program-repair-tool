@@ -35,13 +35,13 @@ public final class Inst_code_1 {
       if (i > 0) {
         sb.append(" + ");
       }
-      sb.append(coeff[i] + "·x^" + i);
+      sb.append(coeff[i] + "Â·x^" + i);
     }
     return sb.toString();
   }
   public static void main(String[] args) { 
 	  
-	  var originalPoly = new Inst_code_1(new double[] { 1, 2, 3 });
+	  var originalPoly = new Inst_code_1(new double[] { 1, 2, 3, 4 });
 	  System.out.println(originalPoly.differentiate());
   }
   
