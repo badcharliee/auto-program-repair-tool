@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,15 +15,20 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.astview.*;
 
 public class parsingASTS {
+	static ArrayList<String> x = new ArrayList<>();
 	//use ASTParse to parse string
 	public static void parse(String str) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setSource(str.toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 	    CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+	   
  
 		cu.accept(new ASTVisitor() {
 			//This set contains the names of each node in the ast
@@ -30,10 +36,11 @@ public class parsingASTS {
  
 			public boolean visit(VariableDeclarationFragment node) {
 				SimpleName name = node.getName();
-				System.out.println(node.subtreeMatch(new ASTMatcher(),2));
+				x.add(name.getIdentifier());
+				System.out.println(node.getRoot());
 				// adds the names of each node in the tree to the set,
-				this.names.add(name.getIdentifier());
-				System.out.println("Declaration of '" + name + "' at line"+ cu.getLineNumber(name.getStartPosition()));
+				//this.names.add(name.getIdentifier());
+				//System.out.println("Declaration of '" + name + "' at line"+ cu.getLineNumber(name.getStartPosition()));
 				return false; // do not continue 
 			}
  
@@ -45,7 +52,7 @@ public class parsingASTS {
 				return true;
 			}
 		});
-		System.out.println(cu);
+		System.out.println(x.toString());
  
 	}
  
