@@ -1,4 +1,7 @@
+import javassist.bytecode.SignatureAttribute;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class Method extends Lineament {
 
@@ -17,13 +20,32 @@ class Method extends Lineament {
         this.name = name;
         this.returnValue = returnValue;
         this.returnType = returnType;
+        this.signature = new MethodSignature(parameters, (String)name, (String)returnType);
+        this.variablesHashMap = convertVariablesToHashMap();
     }
 
     private ArrayList<Variable> variables;
     private ArrayList<Parameter> parameters;
+    private HashMap<Variable, Variable> variablesHashMap;
+    private MethodSignature signature;
     private Object name;
     private Object returnValue;
     private Object returnType;
+
+    // converts array list of Variables to a HashMap for easy lookup
+    private HashMap<Variable, Variable> convertVariablesToHashMap() {
+        HashMap<Variable, Variable> variablesHashMap = new HashMap<>();
+        for (Variable var : variables) {
+            variablesHashMap.put(var, var);
+        }
+        return variablesHashMap;
+    }
+
+    // takes a Variable as an argument.
+    // returns true if Method contains an equivalent Variable, else return false
+    public boolean hasVariable(Variable variable) {
+        return variablesHashMap.containsKey(variable) ? true : false;
+    }
 
     @Override
     public String toString() {
@@ -45,6 +67,8 @@ class Method extends Lineament {
 
         return sb.toString();
     }
+
+    // TODO: Override equals and hashCode methods
 
     public ArrayList<Variable> getVariables() {
         return variables;
@@ -77,4 +101,12 @@ class Method extends Lineament {
     }
 
     public void setReturnType(Object returnType) { this.returnType = returnType; }
+
+    public MethodSignature getSignature() {
+        return signature;
+    }
+
+    public void setSignature(MethodSignature signature) {
+        this.signature = signature;
+    }
 }

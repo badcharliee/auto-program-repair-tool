@@ -18,9 +18,9 @@ public class FieldParser extends JsonASTParser {
 
             if (nodeName.equals("VariableDeclarator")) {
 
-                Object name = variable.get("name").getAsJsonObject().get("identifier").getAsString();
-                Object type = variable.get("type").getAsJsonObject().get("type").getAsString();
-                Object value = "";
+                String name = variable.get("name").getAsJsonObject().get("identifier").getAsString();
+                String type = variable.get("type").getAsJsonObject().get("type").getAsString();
+                String value = "";
                 Object line = extractLineFor(variable);
 
                 try {

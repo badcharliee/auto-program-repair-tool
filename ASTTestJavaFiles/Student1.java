@@ -3,7 +3,7 @@ class TwoPlusTwo {
 	int a = 2;
 	int b = 4;
 
-	public int getInt() {
+	public int getInteger(int y, int x) {
 		return 1;
 	}
 
