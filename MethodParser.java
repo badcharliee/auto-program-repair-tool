@@ -66,9 +66,9 @@ class MethodParser extends JsonASTParser {
                     for (int j = 0; j < variables.size(); j++) {
                         JsonObject variable = variables.get(i).getAsJsonObject();
 
-                        Object name = variable.get("name").getAsJsonObject().get("identifier").getAsString();
-                        Object type = variable.get("type").getAsJsonObject().get("type").getAsString();
-                        Object value = "";
+                        String name = variable.get("name").getAsJsonObject().get("identifier").getAsString();
+                        String type = variable.get("type").getAsJsonObject().get("type").getAsString();
+                        String value = "";
                         Object line = extractLineFor(variable);
 
                         try {
@@ -102,8 +102,8 @@ class MethodParser extends JsonASTParser {
 
         for (int i = 0; i < parameters.size(); i++) {
             JsonObject parameter = parameters.get(i).getAsJsonObject();
-            Object name = parameter.get("name").getAsJsonObject().get("identifier").getAsString();
-            Object type = parameter.get("type").getAsJsonObject().get("type").getAsString();
+            String name = parameter.get("name").getAsJsonObject().get("identifier").getAsString();
+            String type = parameter.get("type").getAsJsonObject().get("type").getAsString();
             Object line = extractLineFor(parameter);
 
             Parameter param = new Parameter(name, type, line);

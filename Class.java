@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class Class extends Lineament {
 
@@ -13,10 +14,12 @@ class Class extends Lineament {
         this.methods = methods;
         this.fields = fields;
         this.name = name;
+        this.methodSignatureHashMap = convertMethodSignaturesToHashMap();
     }
 
     private ArrayList<Method> methods;
     private ArrayList<Field> fields;
+    private HashMap<MethodSignature, MethodSignature> methodSignatureHashMap;
     private Object name;
 
     @Override
@@ -34,6 +37,23 @@ class Class extends Lineament {
         }
 
         return sb.toString();
+    }
+
+    private HashMap<MethodSignature, MethodSignature> convertMethodSignaturesToHashMap() {
+        HashMap<MethodSignature, MethodSignature> methodSignatureHashMap = new HashMap<>();
+
+        for (int i = 0; i < methods.size(); i++) {
+            MethodSignature signature = methods.get(i).getSignature();
+            methodSignatureHashMap.put(signature, signature);
+        }
+
+        return methodSignatureHashMap;
+    }
+
+    // takes a Method as an argument.
+    // returns true if Class contains an equivalent MethodSignature for Method argument, else return false
+    public boolean hasMethodForSignature(MethodSignature signature) {
+        return methodSignatureHashMap.containsKey(signature) ? true : false;
     }
 
     public ArrayList<Method> getMethods() {
@@ -56,6 +76,14 @@ class Class extends Lineament {
 
     public void setName(Object name) {
         this.name = name;
+    }
+
+    public HashMap<MethodSignature, MethodSignature> getMethodsHashMap() {
+        return methodSignatureHashMap;
+    }
+
+    public void setMethodsHashMap(HashMap<MethodSignature, MethodSignature> methodSignatureHashMap) {
+        this.methodSignatureHashMap = methodSignatureHashMap;
     }
 
 }

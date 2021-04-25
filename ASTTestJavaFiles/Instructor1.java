@@ -4,7 +4,7 @@ class TwoPlusTwo {
 	int b = 2;
 	int c = 3;
 
-	public int getInteger() {
+	public double getInteger(int x, int y) {
 		return 2;
 	}
 

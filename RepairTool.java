@@ -16,6 +16,68 @@ public class RepairTool {
         // compare simple ASTs for student and instructor
         ArrayList<Difference> differences = compareSubmissions(instructorSimplifiedAST, studentSimplifiedAST);
         System.out.println(differences);
+
+//        // test Parameter equality
+//        Parameter param1 = new Parameter("getLine", "INT", "12");
+//        Parameter param2 = new Parameter("getLine", "INT", "21");
+//        Parameter param3 = new Parameter("getInteger", "INT", "312");
+//        System.out.println(param2.equals(param1));
+//
+//        // test param hashCode
+//        HashMap<Parameter, Parameter> parameters = new HashMap<>();
+//        parameters.put(param1, param1);
+//
+//        Parameter matchingParam = parameters.get(param3);
+//        System.out.println(matchingParam);
+
+//        // test Variable equality
+//        Variable var1 = new Variable("foo", "DOUBLE", "21.0", "22");
+//        Variable var2 = new Variable("foo", "DOUBLE", "21.0", "412");
+//        Variable var3 = new Variable("foo", "FLOAT", "21.0", "412");
+//        System.out.println(var1.equals(var2)); // true
+//        System.out.println(var1.equals(var3)); // false
+//        System.out.println(var2.equals(var3)); // false
+//        System.out.println(var2.equals(var1)); // true
+//
+////         test param hashCode
+//        HashMap<Variable, Variable> variables = new HashMap<>();
+//        variables.put(var1, var1);
+//
+//        Variable matchingVar = variables.get(var2);
+//        Variable nonMatchingVar = variables.get(var3);
+//        System.out.println(matchingVar); // non-null
+//        System.out.println(nonMatchingVar); // null
+
+//        Parameter method1Param1 = new Parameter("x", "DOUBLE", "11");
+//        Parameter method1Param2 = new Parameter("y", "DOUBLE", "12");
+//        ArrayList<Parameter> method1Params = new ArrayList<>();
+//        method1Params.add(method1Param1);
+//        method1Params.add(method1Param2);
+//        Method method1 = new Method(new ArrayList<Variable>(), method1Params, "foo", "variableName", "INT", "12");
+//
+//        Parameter method2Param1 = new Parameter("x", "DOUBLE", "1202");
+//        Parameter method2Param2 = new Parameter("y", "DOUBLE", "1222");
+//        ArrayList<Parameter> method2Params = new ArrayList<>();
+//        method2Params.add(method2Param1);
+//        method2Params.add(method2Param2);
+//        Method method2 = new Method(new ArrayList<Variable>(), method2Params, "foo", "variableName", "INT", "1222");
+//
+//        Parameter method3Param1 = new Parameter("X", "INT", "202");
+//        Parameter method3Param2 = new Parameter("y", "INT", "3222");
+//        ArrayList<Parameter> method3Params = new ArrayList<>();
+//        method3Params.add(method3Param2);
+//        method3Params.add(method3Param1);
+//        Method method3 = new Method(new ArrayList<Variable>(), method3Params, "foo", "variableName", "INT", "1222");
+//
+//        System.out.println(method1.getSignature().equals(method2.getSignature())); // true
+//        System.out.println(method2.getSignature().equals(method1.getSignature())); // true
+//        System.out.println(method2.getSignature().equals(method2.getSignature())); // true
+//        System.out.println(method2.getSignature().equals(method3.getSignature())); // false
+//
+//        // print hash codes for each method signature
+//        System.out.println(method1.getSignature().hashCode());
+//        System.out.println(method2.getSignature().hashCode());
+//        System.out.println(method3.getSignature().hashCode());
     }
 
     static Difference compareClassNames(Class instructorAST, Class studentAST) {
@@ -55,115 +117,37 @@ public class RepairTool {
 
         ArrayList<Difference> differences = new ArrayList<>();
 
-        ArrayList<Method> instructorMethods = instructorAST.getMethods();
-        ArrayList<Method> studentMethods = studentAST.getMethods();
-        for (int i = 0; i < instructorMethods.size(); i++) {
-            Method instructorMethod = instructorMethods.get(i);
-            String instructorMethodName = (String)instructorMethod.getName();
-            String instructorMethodReturnType = (String)instructorMethod.getReturnType();
-            ArrayList<Parameter> instructorParams = instructorMethod.getParameters();
-
-            // search for matching student method
-            boolean studentHasMethodSignature = false;
-            for (int j = 0; j < studentMethods.size(); j++) {
-
-                boolean studentHasMethodName = false;
-                boolean studentHasMethodReturnType = false;
-                boolean studentHasMethodParams = false;
-
-                Method studentMethod = studentMethods.get(j);
-                String studentMethodName = (String)studentMethod.getName();
-                String studentMethodReturnType = (String)studentMethod.getReturnType();
-                ArrayList<Parameter> studentParams = studentMethod.getParameters();
-
-                // check for matching method name
-                if (studentMethodName.equals(instructorMethodName)) {
-                    studentHasMethodName = true;
-                }
-
-                // check for matching return type
-                if (studentMethodReturnType.equals(instructorMethodReturnType)) {
-                    studentHasMethodReturnType = true;
-                }
-
-                // TODO: check for matching params
-
-                // TODO: add check for params to boolean evaluation of method signature
-                if (studentHasMethodName && studentHasMethodReturnType) {
-                    studentHasMethodSignature = true;
-                    break;
-                }
-
-
+        for (int i = 0; i < instructorAST.getMethods().size(); i++) {
+            MethodSignature instructorMethodSignature = instructorAST.getMethods().get(i).getSignature();
+            if (!studentAST.hasMethodForSignature(instructorMethodSignature)) {
+                String differenceString = String.format("Instructor defined method with signature: %s, but you didn't define this method.\n", instructorMethodSignature);
+                differences.add(new Difference(differenceString, "0"));
             }
-
-            if (!studentHasMethodSignature) {
-                String differenceString = String.format("Instructor defined method with signature: '%s %s(...)', but you didn't define this method.\n", ((String) instructorMethod.getReturnType()).toLowerCase(), instructorMethod.getName());
-                Difference difference = new Difference(differenceString, "0");
-                differences.add(difference);
-            }
-
         }
 
         return differences;
     }
 
     static ArrayList<Difference> checkForExtraStudentMethodSignatures(Class instructorAST, Class studentAST) {
-
         ArrayList<Difference> differences = new ArrayList<>();
 
-        ArrayList<Method> studentMethods = studentAST.getMethods();
-        ArrayList<Method> instructorMethods = instructorAST.getMethods();
-        for (int i = 0; i < studentMethods.size(); i++) {
-            Method studentMethod = studentMethods.get(i);
-            String studentMethodName = (String)studentMethod.getName();
-            String studentMethodReturnType = (String)studentMethod.getReturnType();
-            ArrayList<Parameter> studentParams = studentMethod.getParameters();
-
-            // search for matching instructor method
-            boolean instructorHasMethodSignature = false;
-            for (int j = 0; j < instructorMethods.size(); j++) {
-
-                boolean instructorHasMethodName = false;
-                boolean instructorHasMethodReturnType = false;
-                boolean instructorHasMethodParams = false;
-
-                Method instructorMethod = instructorMethods.get(i);
-                String instructorMethodName = (String)instructorMethod.getName();
-                String instructorMethodReturnType = (String)instructorMethod.getReturnType();
-                ArrayList<Parameter> instructorParams = instructorMethod.getParameters();
-
-                // check for matching method name
-                if (instructorMethodName.equals(studentMethodName)) {
-                    instructorHasMethodName = true;
-                }
-
-                // check for matching return type
-                if (instructorMethodReturnType.equals(studentMethodReturnType)) {
-                    instructorHasMethodReturnType = true;
-                }
-
-                // TODO: check for matching params
-
-                // TODO: add check for params to boolean evaluation of method signature
-                if (instructorHasMethodName && instructorHasMethodReturnType) {
-                    instructorHasMethodSignature = true;
-                    break;
-                }
-
-
-            }
-
-            if (!instructorHasMethodSignature) {
-                String differenceString = String.format("You defined a method with signature: '%s %s(...)', but the instructor has no method with that signature.\n", ((String) studentMethod.getReturnType()).toLowerCase(), studentMethod.getName());
+        for (int i = 0; i < studentAST.getMethods().size(); i++) {
+            MethodSignature studentMethodSignature = studentAST.getMethods().get(i).getSignature();
+            Method studentMethod = studentAST.getMethods().get(i);
+            if (!instructorAST.hasMethodForSignature(studentMethodSignature)) {
+                String differenceString = String.format("You defined a method with signature: %s, but the instructor has no method with that signature.\n", studentMethodSignature.toString());
                 Difference difference = new Difference(differenceString, (String)studentMethod.getLine());
                 differences.add(difference);
             }
-
         }
 
         return differences;
+    }
 
+    // TODO: in progress
+    static ArrayList<Difference> compareMethodInstanceVariables(Class instructorAST, Class studentAST) {
+        ArrayList<Difference> differences = new ArrayList<>();
+        return differences;
     }
 
     static ArrayList<Difference> compareSubmissions(Class instructorAST, Class studentAST) {
@@ -193,8 +177,6 @@ public class RepairTool {
         ArrayList<Difference> extraStudentMethodSignatures = checkForExtraStudentMethodSignatures(instructorAST, studentAST);
         if (extraStudentMethodSignatures.size() > 0)
             differences.addAll(extraStudentMethodSignatures);
-
-
 
         // compare method instance variables
         // compare field definitions
