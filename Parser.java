@@ -73,7 +73,7 @@ public class Parser extends JsonASTParser {
             String astJsonString = serialize(compilationUnit, true);
 
             // print AST json string
-//            System.out.println(astJsonString);
+            System.out.println(astJsonString);
 
             // convert AST json string into JsonObject
             JsonParser parser = new JsonParser();
