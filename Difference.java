@@ -9,7 +9,7 @@ public class Difference extends Lineament {
 
     @Override
     public String toString() {
-        return String.format("Difference: '%s' found at line %s\n", difference, getLine());
+        return String.format("%s Found at line %s\n", difference, getLine());
     }
 
     public String getDifference() {

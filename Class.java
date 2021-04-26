@@ -15,11 +15,13 @@ class Class extends Lineament {
         this.fields = fields;
         this.name = name;
         this.methodSignatureHashMap = convertMethodSignaturesToHashMap();
+        this.fieldsHashMap = convertFieldsToHashMap();
     }
 
     private ArrayList<Method> methods;
     private ArrayList<Field> fields;
     private HashMap<MethodSignature, MethodSignature> methodSignatureHashMap;
+    private HashMap<Field, Field> fieldsHashMap;
     private Object name;
 
     @Override
@@ -39,6 +41,24 @@ class Class extends Lineament {
         return sb.toString();
     }
 
+    // TODO
+    private HashMap<Field, Field> convertFieldsToHashMap() {
+        HashMap<Field, Field> fieldsHashMap = new HashMap<>();
+
+        for (int i = 0; i < fields.size(); i++) {
+            Field field = fields.get(i);
+            fieldsHashMap.put(field, field);
+        }
+
+        return fieldsHashMap;
+    }
+
+    // takes a Field as an argument.
+    // returns true if Class contains an equivalent Field, else return false
+    public boolean hasField(Field field) {
+        return fieldsHashMap.containsKey(field) ? true : false;
+    }
+
     private HashMap<MethodSignature, MethodSignature> convertMethodSignaturesToHashMap() {
         HashMap<MethodSignature, MethodSignature> methodSignatureHashMap = new HashMap<>();
 
@@ -50,8 +70,8 @@ class Class extends Lineament {
         return methodSignatureHashMap;
     }
 
-    // takes a Method as an argument.
-    // returns true if Class contains an equivalent MethodSignature for Method argument, else return false
+    // takes a MethodSignature as an argument.
+    // returns true if Class contains an equivalent MethodSignature, else return false
     public boolean hasMethodForSignature(MethodSignature signature) {
         return methodSignatureHashMap.containsKey(signature) ? true : false;
     }

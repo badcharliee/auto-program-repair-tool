@@ -54,7 +54,7 @@ public class ClassParser extends JsonASTParser {
                     // add the method declaration to 'methodDeclarations'
                     FieldParser fieldParser = new FieldParser();
                     Field field = new Field(
-                            fieldParser.extractVariablesFrom(member),
+                            fieldParser.extractVariableFrom(member),
                             fieldParser.extractLineFor(member)
                     );
                     fields.add(field);
