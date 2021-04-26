@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class FieldParser extends JsonASTParser {
 
-    static ArrayList<Variable> extractVariablesFrom(JsonObject fieldDeclaration) {
+    static Variable extractVariableFrom(JsonObject fieldDeclaration) {
 
-        ArrayList<Variable> vars = new ArrayList<>();
+        Variable var = null;
 
         JsonArray variables = fieldDeclaration.get("variables").getAsJsonArray();
 
@@ -34,13 +34,12 @@ public class FieldParser extends JsonASTParser {
                     value = "NULL";
                 }
 
-                Variable var = new Variable(name, type, value, line);
-                vars.add(var);
+                var = new Variable(name, type, value, line);
             }
 
         }
 
-        return vars;
+        return var;
     }
 
 }

@@ -144,9 +144,35 @@ public class RepairTool {
         return differences;
     }
 
-    // TODO: in progress
-    static ArrayList<Difference> compareMethodInstanceVariables(Class instructorAST, Class studentAST) {
+    static ArrayList<Difference> checkForMissingStudentFieldDefinitions(Class instructorAST, Class studentAST) {
         ArrayList<Difference> differences = new ArrayList<>();
+
+        for (int i = 0; i < instructorAST.getFields().size(); i++) {
+
+            Field instructorField = instructorAST.getFields().get(i);
+            if (!studentAST.hasField(instructorField)) {
+                String differenceString = String.format("Instructor defined field '%s %s = %s;', but you didn't define this field.\n", instructorField.getVariable().getType(), instructorField.getVariable().getName(), instructorField.getVariable().getValue());
+                differences.add(new Difference(differenceString, "0"));
+            }
+
+        }
+
+        return differences;
+    }
+
+    static ArrayList<Difference> checkForExtraStudentFieldDefinitions(Class instructorAST, Class studentAST) {
+        ArrayList<Difference> differences = new ArrayList<>();
+
+        for (int i = 0; i < studentAST.getFields().size(); i++) {
+
+            Field studentField = studentAST.getFields().get(i);
+            if (!instructorAST.hasField(studentField)) {
+                String differenceString = String.format("You defined a field: '%s %s = %s;', but the instructor has no field with that definition.\n", studentField.getVariable().getType(), studentField.getVariable().getName(), studentField.getVariable().getValue());
+                differences.add(new Difference(differenceString, (String)studentField.getLine()));
+            }
+
+        }
+
         return differences;
     }
 
@@ -178,8 +204,17 @@ public class RepairTool {
         if (extraStudentMethodSignatures.size() > 0)
             differences.addAll(extraStudentMethodSignatures);
 
+        // check that student has all the field definitions that instructor has
+        ArrayList<Difference> missingStudentFields = checkForMissingStudentFieldDefinitions(instructorAST, studentAST);
+        if (missingStudentFields.size() > 0)
+            differences.addAll(missingStudentFields);
+
+        // check that student field definitions have also been defined by the instructor
+        ArrayList<Difference> extraStudentFields = checkForExtraStudentFieldDefinitions(instructorAST, studentAST);
+        if (extraStudentFields.size() > 0)
+            differences.addAll(extraStudentFields);
+
         // compare method instance variables
-        // compare field definitions
 
         return differences;
     }

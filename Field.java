@@ -1,36 +1,55 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Field extends Lineament {
 
     Field() {
-        this.variables = new ArrayList<>();
+        this.variable = null;
     }
 
-    Field(ArrayList<Variable> variables, Object line) {
+    Field(Variable variable, Object line) {
         super(line);
-        this.variables = variables;
+        this.variable = variable;
     }
+
+    private Variable variable;
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Field(line, variables) -> \n");
+        sb.append("Field(line, variable) -> \n");
         sb.append("\t\tLine: " + (String)getLine() + "\n");
-        for (int i = 0; i < variables.size(); i++) {
-            sb.append(String.format("\t\t%s\n", variables.get(i).toString()));
-        }
-
+        sb.append(String.format("\t\t%s\n", getVariable().toString()));
         return sb.toString();
     }
 
-    private ArrayList<Variable> variables;
-
-    public ArrayList<Variable> getVariables() {
-        return variables;
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Field))
+            return false;
+        Field other = (Field)o;
+        boolean variableEquals = (this.variable == null && other.variable == null)
+                || (this.variable != null && this.variable.equals(other.variable));
+        return variableEquals;
     }
 
-    public void addVariable(Variable variable) {
-        variables.add(variable);
+    @Override
+    public final int hashCode() {
+        int result = 17;
+        if (variable != null) {
+            result = 31 * result + variable.hashCode();
+        }
+        return result;
+    }
+
+    public Variable getVariable() {
+        return variable;
+    }
+
+    public void setVariable(Variable variable) {
+        this.variable = variable;
     }
 
 }
