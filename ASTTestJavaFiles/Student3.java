@@ -1,5 +1,5 @@
-class WriteMainMethod {
-	public static void main() {
+class MethodSignature {
+	public static void defineParams(double a, double b, double c) {
 		return 0;
 	}
 }
