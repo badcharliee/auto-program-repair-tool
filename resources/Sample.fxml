@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane fx:id="boarderPane" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="SampleController">
+    <center>
+        <AnchorPane fx:id="anchorPane" prefHeight="662.0" prefWidth="946.0" BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar fx:id="menuBar" layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <menus>
+                        <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem fx:id="menuItemReset" mnemonicParsing="false" onAction="#resetProgram" text="Reset" />
+                                <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#exitProgram" text="EXIT" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem fx:id="menuItemReadMe" mnemonicParsing="false" onAction="#readMePressed" text="Read-me" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <SplitPane fx:id="splitPane" dividerPositions="0.1712135465663217" layoutX="14.0" layoutY="23.0" orientation="VERTICAL" prefHeight="320.0" prefWidth="460.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="23.0">
+                    <items>
+                        <AnchorPane fx:id="AnchorPaneTop" minHeight="0.0" minWidth="0.0" prefHeight="62.0" prefWidth="945.0" style="-fx-background-color: Grey;">
+                            <children>
+                                <TextField fx:id="javaCodeInp" layoutX="191.0" layoutY="25.0" prefHeight="26.0" prefWidth="637.0" />
+                                <ToggleButton fx:id="profBtn" layoutX="105.0" layoutY="40.0" mnemonicParsing="false" onAction="#setStatus" prefHeight="26.0" prefWidth="70.0" text="Professor" />
+                                <ToggleButton fx:id="StudBtn" layoutX="105.0" layoutY="12.0" mnemonicParsing="false" onAction="#setStatus" prefHeight="26.0" prefWidth="69.0" text="Student" />
+                                <Button fx:id="compareBtn" layoutX="440.0" layoutY="61.0" mnemonicParsing="false" onAction="#CompareBtnPressed" text="Compare" />
+                                <Button fx:id="loadBtn" layoutX="323.0" layoutY="61.0" mnemonicParsing="false" onAction="#loadInput" text="Load" />
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="AnchorPaneBottom" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                            <children>
+                                <ScrollPane fx:id="scrollPane" layoutX="21.0" layoutY="23.0" prefHeight="492.0" prefWidth="909.0">
+                                    <content>
+                                        <TextArea fx:id="outputTextArea" editable="false" prefHeight="490.0" prefWidth="907.0" />
+                                    </content>
+                                </ScrollPane>
+                            </children>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>
